@@ -45,14 +45,17 @@ const populateTable = (pdt_data) => {
             tbody.appendChild(tr);
         */
     });
+    calcTotal(pdt_data);
 }
 
-const PriceTotal = pdt_collection.reduce((acc, curr) => {
-    acc += curr.Price;
-    return acc;
-}, 0);
-
-pdt_table_body.innerHTML += `<tr><td colspan="3" style="text-align: right;" class="table-info">Total</td><td class="table-info">${PriceTotal}</td></tr>`;
+const calcTotal = (pdt_data) => {
+    const PriceTotal = pdt_data.reduce((acc, curr) => {
+        acc += curr.Price;
+        return acc;
+    }, 0);
+    
+    pdt_table_body.innerHTML += `<tr><td colspan="3" style="text-align: right;" class="table-info">Total</td><td class="table-info">${PriceTotal}</td></tr>`;
+}
 
 //Searching by Product name
 let flag = false;
