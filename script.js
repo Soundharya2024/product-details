@@ -33,11 +33,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const populateTable = (pdt_data) => {
-    pdt_table_body.innerHTML = "";
+    
+    /*When there is no data to be populated */
     if(pdt_data.length == 0) {
         pdt_table_body.innerHTML = `<tr class="table-warning"><td colspan="4">No matches found</td></tr>`;
+        return;
     }
 
+    /*Populating data in the table */
+    pdt_table_body.innerHTML = "";
     pdt_data.map((pdt_obj) => {
         pdt_table_body.innerHTML += `<tr class="table-secondary"><td>${pdt_obj["S.No"]}</td><td>${pdt_obj["Product Name"]}</td><td>${pdt_obj["Brand Name"]}</td><td>${pdt_obj["Price"]}</td></tr>`;
         /* Alternate way
@@ -49,16 +53,31 @@ const populateTable = (pdt_data) => {
             tbody.appendChild(tr);
         */
     });
-    calcTotal(pdt_data);
+
+    const total_price = calcPriceTotal();
+    
+    /*Printing total price of the displayed data*/
+    pdt_table_body.innerHTML += `<tr><td colspan="3" style="text-align: right;" class="table-info">Total</td><td class="table-info">${total_price}</td></tr>`;
 }
 
-const calcTotal = (pdt_data) => {
-    const PriceTotal = pdt_data.reduce((acc, curr) => {
+const calcPriceTotal = () => {
+    /*Getting the price from the DOM*/
+    const pdt_table_rows = pdt_table_body.getElementsByTagName("tr"); //returns HTMLCollection
+    const pdt_arr = [...pdt_table_rows]; //Converting HTMLCollection to Array
+
+    const total_price = pdt_arr.reduce((acc, curr) => {
+        acc += Number(curr.children[3].innerText);
+        return acc;
+    }, 0);
+   
+    /* With pdt_data passed as an argument
+    const total_price = pdt_data.reduce((acc, curr) => {
         acc += curr.Price;
         return acc;
     }, 0);
-    
-    pdt_table_body.innerHTML += `<tr><td colspan="3" style="text-align: right;" class="table-info">Total</td><td class="table-info">${PriceTotal}</td></tr>`;
+    */
+
+    return total_price;
 }
 
 //Searching by Product/Brand name or Price
