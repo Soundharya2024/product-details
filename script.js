@@ -12,10 +12,8 @@ const pdt_collection = [
     {"S.No": 11, "Product Name": "Air Conditioner", "Brand Name": "Samsung", "Price": 45000}
 ];
 
-const pdt_table = document.getElementById("pdt-table");
-
-//Creating and populating table head elements
-const pdt_table_head = document.createElement("thead");
+//Creating and populating table head elements - not necessary
+/* const pdt_table_head = document.createElement("thead");
 const thead_row = document.createElement("tr");
 
 const pdt_keys = Object.keys(pdt_collection[0]);
@@ -26,16 +24,28 @@ for(const key of pdt_keys) {
     thead_row.classList.add("table-primary");
 }
 
-pdt_table_head.appendChild(thead_row);
+pdt_table_head.appendChild(thead_row); */
 
 //Creating and populating table body elements
-const pdt_table_body = document.createElement("tbody");
-pdt_collection.map((table_row_obj) => {
-    pdt_table_body.innerHTML += `<tr class="table-secondary"><td>${table_row_obj["S.No"]}</td><td>${table_row_obj["Product Name"]}</td><td>${table_row_obj["Brand Name"]}</td><td>${table_row_obj["Price"]}</td></tr>`;
+const pdt_table_body = document.querySelector("tbody");
+document.addEventListener("DOMContentLoaded", () => {
+    populateTable(pdt_collection);
 });
 
-pdt_table.appendChild(pdt_table_head);
-pdt_table.appendChild(pdt_table_body);
+const populateTable = (pdt_data) => {
+    pdt_table_body.innerHTML = "";
+    pdt_data.map((pdt_obj) => {
+        pdt_table_body.innerHTML += `<tr class="table-secondary"><td>${pdt_obj["S.No"]}</td><td>${pdt_obj["Product Name"]}</td><td>${pdt_obj["Brand Name"]}</td><td>${pdt_obj["Price"]}</td></tr>`;
+        /* Alternate way
+            const tr = document.createElement("tr");
+            let td = `<td>${product.S_No}</td>`;
+            td += `<td>${product.Product}</td>`;
+            td += `<td>${product.Price}</td>`;
+            tr.innerHTML = td;
+            tbody.appendChild(tr);
+        */
+    });
+}
 
 const PriceTotal = pdt_collection.reduce((acc, curr) => {
     acc += curr.Price;
