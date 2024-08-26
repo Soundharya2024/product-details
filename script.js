@@ -34,6 +34,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const populateTable = (pdt_data) => {
     pdt_table_body.innerHTML = "";
+    if(pdt_data.length == 0) {
+        pdt_table_body.innerHTML = `<tr class="table-warning"><td colspan="4">No matches found</td></tr>`;
+    }
+
     pdt_data.map((pdt_obj) => {
         pdt_table_body.innerHTML += `<tr class="table-secondary"><td>${pdt_obj["S.No"]}</td><td>${pdt_obj["Product Name"]}</td><td>${pdt_obj["Brand Name"]}</td><td>${pdt_obj["Price"]}</td></tr>`;
         /* Alternate way
@@ -57,15 +61,11 @@ const calcTotal = (pdt_data) => {
     pdt_table_body.innerHTML += `<tr><td colspan="3" style="text-align: right;" class="table-info">Total</td><td class="table-info">${PriceTotal}</td></tr>`;
 }
 
-//Searching by Product name
-let flag = false;
-document.getElementById("search-btn").addEventListener("click", (e) => {
-    pdt_table_body.innerHTML = "";
-    pdt_collection.filter((pdt) => pdt["Product Name"].includes(e.target.previousElementSibling.value.toLowerCase())).map((table_row_obj, index, arr) => {
-        flag = true;
-        pdt_table_body.innerHTML += `<tr class="table-success"><td>${table_row_obj["S.No"]}</td><td>${table_row_obj["Product Name"]}</td><td>${table_row_obj["Brand Name"]}</td><td>${table_row_obj["Price"]}</td></tr>`;
+//Searching by Product/Brand name or Price
+document.getElementById("search-bar").addEventListener("input", (e) => {
+    let search_value = e.target.value.toLowerCase();
+    const pdt_filtered = pdt_collection.filter((pdt) => {
+        return pdt["Product Name"].toLowerCase().includes(search_value) || pdt["Brand Name"].toLowerCase().includes(search_value) ||pdt.Price.toString().includes(search_value);
     });
-    if(!flag){
-        pdt_table_body.innerHTML = `<tr class="table-info"><td colspan="4">No matches found</td></tr>`;  
-    }
+    populateTable(pdt_filtered);
 });
